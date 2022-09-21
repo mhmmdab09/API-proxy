@@ -6,6 +6,22 @@ import (
 	"os"
 )
 
+type anyService struct {
+	ID      string
+	name    string
+	baseURL string
+	auth    string
+}
+
+type anyClient struct {
+	ID            string
+	name          string
+	clientToken   string
+	auth          string
+	calledService string
+	pathPrefix    string
+}
+
 func readConfig() {
 	//todo
 }

@@ -6,6 +6,14 @@ import (
 	"os"
 )
 
+func readConfig() {
+	//todo
+}
+
+func callService() {
+	//todo
+}
+
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		w.WriteHeader(http.StatusNotFound)
@@ -14,6 +22,10 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Running API v1\n"))
+}
+
+func getSecret() {
+	//todo
 }
 
 func main() {

@@ -46,19 +46,18 @@ func callService(authKey string, authValue string, serviceID string, baseU strin
 }
 
 func getSecret(w http.ResponseWriter, r *http.Request) {
+
 	pointToAddressService.ID = "01"
 	pointToAddressService.name = "Address API"
 	pointToAddressService.baseURL = "https://api.neshan.org/v5/reverse"
 	pointToAddressService.requestPATH = "?lat=32.654012&lng=51.666944"
 	pointToAddressService.secretKey = "Api-Key"
-	//pointToAddressService.secretValue = "service.f586da437b9147999e42808212e4b573"
 
 	distanceService.ID = "02"
 	distanceService.name = "Distance API"
 	distanceService.baseURL = "https://api.neshan.org/v1/distance-matrix"
 	distanceService.requestPATH = "?type=car&origins=36.3177579,59.5323219&destinations=36.35067,59.5451965"
 	distanceService.secretKey = "Api-Key"
-	//distanceService.secretValue = "service.21db1d0baa3c42838f0cdf68a8c8073a"
 
 	if r.URL.Path != "/secret" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
@@ -77,8 +76,6 @@ func getSecret(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Post from website! r.PostFrom = %v\n", r.PostForm)
 		pointToAddressService.secretValue = r.FormValue("address_secret")
 		distanceService.secretValue = r.FormValue("distance_secret")
-		//name := r.FormValue("name")
-		//address := r.FormValue("address")
 		fmt.Fprintf(w, "Address API secret = %s\n", pointToAddressService.secretValue)
 		fmt.Fprintf(w, "Distance API secret = %s\n", distanceService.secretValue)
 
@@ -88,25 +85,34 @@ func getSecret(w http.ResponseWriter, r *http.Request) {
 }
 
 func clientHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("Asset not found\n"))
-		//return
+
+	switch r.URL.Path {
+	case "/api1/v1/distance/":
+		{
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(callService(distanceService.secretKey, distanceService.secretValue, distanceService.ID, distanceService.baseURL, distanceService.requestPATH)))
+		}
+	case "/api1/v1/address/":
+		{
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(callService(pointToAddressService.secretKey, pointToAddressService.secretValue, pointToAddressService.ID, pointToAddressService.baseURL, pointToAddressService.requestPATH)))
+		}
+	default:
+		{
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte("Asset not found\n"))
+		}
 	}
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(pointToAddressService.secretValue))
-	w.Write([]byte(distanceService.secretValue))
-	w.Write([]byte(callService(distanceService.secretKey, distanceService.secretValue, distanceService.ID, distanceService.baseURL, distanceService.requestPATH)))
-	w.Write([]byte(callService(pointToAddressService.secretKey, pointToAddressService.secretValue, pointToAddressService.ID, pointToAddressService.baseURL, pointToAddressService.requestPATH)))
 
 }
 
 func main() {
 	http.HandleFunc("/secret", getSecret)
-	http.HandleFunc("/", clientHandler)
+	http.HandleFunc("/api1/v1/address/", clientHandler)
+	http.HandleFunc("/api1/v1/distance/", clientHandler)
 
 	fmt.Printf("Starting server for testing HTTP POST...\n")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":11111", nil); err != nil {
 		log.Fatal(err)
 	}
 

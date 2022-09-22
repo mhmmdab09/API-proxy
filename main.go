@@ -51,14 +51,14 @@ func getSecret(w http.ResponseWriter, r *http.Request) {
 	pointToAddressService.baseURL = "https://api.neshan.org/v5/reverse"
 	pointToAddressService.requestPATH = "?lat=32.654012&lng=51.666944"
 	pointToAddressService.secretKey = "Api-Key"
-	pointToAddressService.secretValue = "service.f586da437b9147999e42808212e4b573"
+	//pointToAddressService.secretValue = "service.f586da437b9147999e42808212e4b573"
 
 	distanceService.ID = "02"
 	distanceService.name = "Distance API"
 	distanceService.baseURL = "https://api.neshan.org/v1/distance-matrix"
 	distanceService.requestPATH = "?type=car&origins=36.3177579,59.5323219&destinations=36.35067,59.5451965"
 	distanceService.secretKey = "Api-Key"
-	distanceService.secretValue = "service.21db1d0baa3c42838f0cdf68a8c8073a"
+	//distanceService.secretValue = "service.21db1d0baa3c42838f0cdf68a8c8073a"
 
 	if r.URL.Path != "/secret" {
 		http.Error(w, "404 not found.", http.StatusNotFound)

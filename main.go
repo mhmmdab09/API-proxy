@@ -12,7 +12,6 @@ type anyService struct {
 	ID          string
 	name        string
 	baseURL     string
-	requestPATH string
 	secretKey   string
 	secretValue string
 }
@@ -38,8 +37,8 @@ func readConfig() {
 	//todo
 }
 
-func callService(authKey string, authValue string, serviceID string, baseU string, pathURL string) (out string) {
-	url := baseU + pathURL
+func callService(authKey string, authValue string, serviceID string, baseU string, params string) (out string) {
+	url := baseU + "?" + params
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Add(authKey, authValue)
 	res, _ := http.DefaultClient.Do(req)
@@ -56,13 +55,11 @@ func getSecret(w http.ResponseWriter, r *http.Request) {
 	pointToAddressService.ID = "01"
 	pointToAddressService.name = "Address API"
 	pointToAddressService.baseURL = "https://api.neshan.org/v5/reverse"
-	pointToAddressService.requestPATH = "?lat=32.654012&lng=51.666944"
 	pointToAddressService.secretKey = "Api-Key"
 
 	distanceService.ID = "02"
 	distanceService.name = "Distance API"
 	distanceService.baseURL = "https://api.neshan.org/v1/distance-matrix"
-	distanceService.requestPATH = "?type=car&origins=36.3177579,59.5323219&destinations=36.35067,59.5451965"
 	distanceService.secretKey = "Api-Key"
 
 	if r.URL.Path != "/secret" {
@@ -102,7 +99,7 @@ func clientHandler(w http.ResponseWriter, r *http.Request) {
 				distanceService.secretValue,
 				distanceService.ID,
 				distanceService.baseURL,
-				distanceService.requestPATH)))
+				r.URL.RawQuery)))
 		}
 	case "/address/":
 		{
@@ -111,7 +108,7 @@ func clientHandler(w http.ResponseWriter, r *http.Request) {
 				pointToAddressService.secretValue,
 				pointToAddressService.ID,
 				pointToAddressService.baseURL,
-				pointToAddressService.requestPATH)))
+				r.URL.RawQuery)))
 		}
 	default:
 		{

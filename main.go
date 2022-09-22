@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type anyService struct {
@@ -16,17 +17,22 @@ type anyService struct {
 	secretValue string
 }
 
-type anyClient struct {
-	ID            string
-	name          string
-	clientToken   string
-	auth          string
-	calledService string
-	pathPrefix    string
-}
-
 var pointToAddressService anyService
 var distanceService anyService
+
+type anyClient struct {
+	ID          string
+	name        string
+	clientToken string
+	pathPrefix  string
+}
+
+var myClient anyClient = anyClient{
+	ID:          "01",
+	name:        "client one",
+	clientToken: "",
+	pathPrefix:  "api1/v1/",
+}
 
 func readConfig() {
 	//todo
@@ -86,16 +92,26 @@ func getSecret(w http.ResponseWriter, r *http.Request) {
 
 func clientHandler(w http.ResponseWriter, r *http.Request) {
 
-	switch r.URL.Path {
-	case "/api1/v1/distance/":
+	var realPath string = strings.ReplaceAll(r.URL.Path, myClient.pathPrefix, "")
+
+	switch realPath {
+	case "/distance/":
 		{
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(callService(distanceService.secretKey, distanceService.secretValue, distanceService.ID, distanceService.baseURL, distanceService.requestPATH)))
+			w.Write([]byte(callService(distanceService.secretKey,
+				distanceService.secretValue,
+				distanceService.ID,
+				distanceService.baseURL,
+				distanceService.requestPATH)))
 		}
-	case "/api1/v1/address/":
+	case "/address/":
 		{
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(callService(pointToAddressService.secretKey, pointToAddressService.secretValue, pointToAddressService.ID, pointToAddressService.baseURL, pointToAddressService.requestPATH)))
+			w.Write([]byte(callService(pointToAddressService.secretKey,
+				pointToAddressService.secretValue,
+				pointToAddressService.ID,
+				pointToAddressService.baseURL,
+				pointToAddressService.requestPATH)))
 		}
 	default:
 		{

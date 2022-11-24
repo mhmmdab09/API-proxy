@@ -1,0 +1,9 @@
+Empty your :11111 port
+
+run the main package
+
+APIs are :
+	localhost:11111/api1/v1/address/?params
+	localhost:11111/api1/v1/distance/?params
+	
+you can use test params in file testparams.txt

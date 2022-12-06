@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	"gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v2"
 )
 
 type anyService struct {
@@ -37,6 +37,7 @@ var myClient anyClient = anyClient{
 
 func readConfig() {
 
+	//todo : yaml file has not been read correctly
 	confContent, err := ioutil.ReadFile("config.yml")
 	if err != nil {
 		log.Fatal(err)
@@ -49,19 +50,21 @@ func readConfig() {
 		log.Fatal(err2)
 	}
 
-	pointToAddressService = conf["pointToAddressService"]
-	distanceService = conf["distanceService"]
+	pointToAddressService = conf["pointToAddressCon"]
+	distanceService = conf["distanceCon"]
+	fmt.Println(pointToAddressService)
+	fmt.Println(distanceService)
 
 	/*
-		pointToAddressService.ID = "01"
-		pointToAddressService.name = "Address API"
-		pointToAddressService.baseURL = "https://api.neshan.org/v5/reverse"
-		pointToAddressService.secretKey = "Api-Key"
+	   pointToAddressService.ID = "01"
+	   pointToAddressService.name = "Address API"
+	   pointToAddressService.baseURL = "https://api.neshan.org/v5/reverse"
+	   pointToAddressService.secretKey = "Api-Key"
 
-		distanceService.ID = "02"
-		distanceService.name = "Distance API"
-		distanceService.baseURL = "https://api.neshan.org/v1/distance-matrix"
-		distanceService.secretKey = "Api-Key"
+	   distanceService.ID = "02"
+	   distanceService.name = "Distance API"
+	   distanceService.baseURL = "https://api.neshan.org/v1/distance-matrix"
+	   distanceService.secretKey = "Api-Key"
 	*/
 }
 
@@ -84,7 +87,6 @@ func callService(authKey string, authValue string, serviceID string, baseU strin
 
 func getSecret(w http.ResponseWriter, r *http.Request) {
 
-	readConfig()
 	if r.URL.Path != "/secret" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
@@ -146,6 +148,8 @@ func main() {
 	http.HandleFunc("/secret", getSecret)
 	http.HandleFunc("/api1/v1/address/", clientHandler)
 	http.HandleFunc("/api1/v1/distance/", clientHandler)
+
+	readConfig()
 
 	fmt.Printf("Starting server for testing HTTP POST...\n")
 	if err := http.ListenAndServe(":11111", nil); err != nil {

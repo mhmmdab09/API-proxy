@@ -60,6 +60,7 @@ func callService(authKey string, authValue string, serviceID string, baseU strin
 
 func getSecret(w http.ResponseWriter, r *http.Request) {
 
+	readConfig()
 	if r.URL.Path != "/secret" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return

@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 )
 
 type anyService struct {
@@ -41,22 +43,26 @@ func readConfig() {
 	}
 
 	conf := make(map[string]anyService)
-	err2 := confContent.Unmarshal(yfile, &data)
+	err2 := yaml.Unmarshal(confContent, &conf)
 
 	if err2 != nil {
-
 		log.Fatal(err2)
 	}
 
-	pointToAddressService.ID = "01"
-	pointToAddressService.name = "Address API"
-	pointToAddressService.baseURL = "https://api.neshan.org/v5/reverse"
-	pointToAddressService.secretKey = "Api-Key"
+	pointToAddressService = conf["pointToAddressService"]
+	distanceService = conf["distanceService"]
 
-	distanceService.ID = "02"
-	distanceService.name = "Distance API"
-	distanceService.baseURL = "https://api.neshan.org/v1/distance-matrix"
-	distanceService.secretKey = "Api-Key"
+	/*
+		pointToAddressService.ID = "01"
+		pointToAddressService.name = "Address API"
+		pointToAddressService.baseURL = "https://api.neshan.org/v5/reverse"
+		pointToAddressService.secretKey = "Api-Key"
+
+		distanceService.ID = "02"
+		distanceService.name = "Distance API"
+		distanceService.baseURL = "https://api.neshan.org/v1/distance-matrix"
+		distanceService.secretKey = "Api-Key"
+	*/
 }
 
 func callService(authKey string, authValue string, serviceID string, baseU string, params string) (out string) {

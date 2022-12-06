@@ -5,7 +5,7 @@ pointToAddressService:
   baseURL: https://api.neshan.org/v5/reverse
   secretKey: Api-Key
 
-pointToAddressService:
+distanceService:
   ID: 02
   name: Distance API
   baseURL: https://api.neshan.org/v1/distance-matrix

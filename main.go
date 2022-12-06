@@ -69,7 +69,11 @@ func callService(authKey string, authValue string, serviceID string, baseU strin
 	url := baseU + "?" + params
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Add(authKey, authValue)
-	res, _ := http.DefaultClient.Do(req)
+	res, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
 	fmt.Println(res)

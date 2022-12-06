@@ -34,7 +34,15 @@ var myClient anyClient = anyClient{
 }
 
 func readConfig() {
-	//todo
+	pointToAddressService.ID = "01"
+	pointToAddressService.name = "Address API"
+	pointToAddressService.baseURL = "https://api.neshan.org/v5/reverse"
+	pointToAddressService.secretKey = "Api-Key"
+
+	distanceService.ID = "02"
+	distanceService.name = "Distance API"
+	distanceService.baseURL = "https://api.neshan.org/v1/distance-matrix"
+	distanceService.secretKey = "Api-Key"
 }
 
 func callService(authKey string, authValue string, serviceID string, baseU string, params string) (out string) {
@@ -51,16 +59,6 @@ func callService(authKey string, authValue string, serviceID string, baseU strin
 }
 
 func getSecret(w http.ResponseWriter, r *http.Request) {
-
-	/* pointToAddressService.ID = "01"
-	pointToAddressService.name = "Address API"
-	pointToAddressService.baseURL = "https://api.neshan.org/v5/reverse"
-	pointToAddressService.secretKey = "Api-Key"
-
-	distanceService.ID = "02"
-	distanceService.name = "Distance API"
-	distanceService.baseURL = "https://api.neshan.org/v1/distance-matrix"
-	distanceService.secretKey = "Api-Key" */
 
 	if r.URL.Path != "/secret" {
 		http.Error(w, "404 not found.", http.StatusNotFound)

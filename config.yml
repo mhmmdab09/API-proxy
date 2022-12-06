@@ -1,18 +1,18 @@
 # Service configurations
 pointToAddressService:
   ID: 01
-  name: "Address API"
-  baseURL: "https://api.neshan.org/v5/reverse"
-  secretKey: "Api-Key"
+  name: Address API
+  baseURL: https://api.neshan.org/v5/reverse
+  secretKey: Api-Key
 
 pointToAddressService:
   ID: 02
-  name: "Distance API"
-  baseURL: "https://api.neshan.org/v1/distance-matrix"
-  secretKey: "Api-Key"
+  name: Distance API
+  baseURL: https://api.neshan.org/v1/distance-matrix
+  secretKey: Api-Key
 
 
-# Database credentials
-database:
-  user: "admin"
-  pass: "super-pedro-1980"
+# Superuser credentials
+superuser:
+  user: admin
+  pass: 1234@4321

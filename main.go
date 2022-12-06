@@ -34,6 +34,7 @@ var myClient anyClient = anyClient{
 }
 
 func readConfig() {
+
 	pointToAddressService.ID = "01"
 	pointToAddressService.name = "Address API"
 	pointToAddressService.baseURL = "https://api.neshan.org/v5/reverse"

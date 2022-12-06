@@ -35,6 +35,19 @@ var myClient anyClient = anyClient{
 
 func readConfig() {
 
+	confContent, err := ioutil.ReadFile("config.yml")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	conf := make(map[string]anyService)
+	err2 := confContent.Unmarshal(yfile, &data)
+
+	if err2 != nil {
+
+		log.Fatal(err2)
+	}
+
 	pointToAddressService.ID = "01"
 	pointToAddressService.name = "Address API"
 	pointToAddressService.baseURL = "https://api.neshan.org/v5/reverse"
